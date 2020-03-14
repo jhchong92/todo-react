@@ -7,7 +7,7 @@ import LogIn from './Auth/LogIn';
 function App() {
   return (
     <div className="App">
-      <LogIn />
+      {/* <LogIn /> */}
       {/* <SignUp /> */}
     </div>
   );

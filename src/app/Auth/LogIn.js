@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from "@material-ui/core/styles";
-import { Container, Typography, Grid, TextField, Button } from "@material-ui/core";
+import { Container, Typography, Grid, TextField, Button, Link } from "@material-ui/core";
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -12,8 +12,9 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(3)
   },
   submit: {
-    marginTop: theme.spacing(3)
-  }
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(1)
+  },
 }))
 
 export default function LogIn() {
@@ -62,6 +63,9 @@ export default function LogIn() {
             >
               Log In
           </Button>
+          <Link href="/register" variant="body2" >
+            {"Don't have an account?"}
+          </Link>
         </form>
       </div>
     </Container>

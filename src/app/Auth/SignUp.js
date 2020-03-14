@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from "@material-ui/core/styles";
-import { Container, Typography, Grid, TextField, Button } from "@material-ui/core";
+import { Container, Typography, Grid, TextField, Button, Link } from "@material-ui/core";
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -12,7 +12,8 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(3)
   },
   submit: {
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(1)
   }
 }))
 
@@ -72,8 +73,11 @@ export default function SignUp() {
             color="primary"
             className={classes.submit}
             >
-              Submit
+              Sign Up
           </Button>
+          <Link href="/login" variant="body2" >
+            {"Already have an account?"}
+          </Link>
         </form>
       </div>
     </Container>
