@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Container, Input, makeStyles, TextField, InputAdornment, Icon, IconButton, Divider, Grid, Typography, Box, List, ListItem, ListItemIcon, Checkbox, ListItemText, ListItemSecondaryAction, Paper, Chip, Button, Link } from '@material-ui/core'
+import { Container, Input, makeStyles, TextField, InputAdornment, Icon, IconButton, Divider, Grid, Typography, Box, List, ListItem, ListItemIcon, Checkbox, ListItemText, ListItemSecondaryAction, Paper, Chip, Button, Link, AppBar, Toolbar } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -37,6 +37,12 @@ const useStyles = makeStyles(theme => ({
   },
   chip: {
     minWidth: '50px'
+  },
+  root: {
+    flexGrow: 1
+  },
+  appBarTitle: {
+    flexGrow: 1
   }
 }))
 
@@ -130,101 +136,112 @@ export default function ToDo() {
   const finalList = filterStatus === 0 ? todoList : todoList.filter((item) => item.status === filterStatus)
 
   return (
-    <Container maxWidth='sm' >
-      <div className={classes.paper}>
-        <Input 
-          className={classes.todoInput}
-          fullWidth
-          placeholder="What is your task?"
-          endAdornment={
-            taskName !== '' && 
-            <InputAdornment position="end">
-              <IconButton fontSize="large"
-                onClick={() => addTask()}
-              ><Icon>label</Icon></IconButton>
-            </InputAdornment>
-          }
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
-          onKeyDown={handleKeyDown}
-          />
-          {
-            todoList.length > 0 &&
-            <div style={{ width: '100%' }}>
-              <Container>
-                <Box p={1} m={1} display="flex">
-                  <Box flexGrow={1}>{pendingCount > 0 ?  getPendingItemsHint(pendingCount) : ''}</Box>
-                    
-                      <Box>
-                        {
-                          todoList.filter((item) => item.status === 2).length > 0 && (
-                            <Link component="button" color="secondary" onClick={clearCompleted}>Clear completed</Link>
-                          )
-                        } 
-                      </Box>
-                </Box>
+    <div > 
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" className={classes.appBarTitle}>To Do ReactJS</Typography>
+            <Button color="inherit">Log Out</Button>
+          </Toolbar>
+        </AppBar>
 
-                <Paper className={classes.listRoot} elevation={1}>
-                  
-                  <List 
-                    onMouseLeave={() => setHoverId(0)}>
-                    {
-                      finalList.map((item, index) => {
-                        const labelId = `label-${item.id}`
-                        return (
-                          <ListItem key={item.id} button 
-                            divider={index !== todoList.length -1}
-                            onMouseEnter={() => setHoverId(item.id)}
+      </div>
+      <Container maxWidth='sm' >
+        <div className={classes.paper}>
+          <Input 
+            className={classes.todoInput}
+            fullWidth
+            placeholder="What is your task?"
+            endAdornment={
+              taskName !== '' && 
+              <InputAdornment position="end">
+                <IconButton fontSize="large"
+                  onClick={() => addTask()}
+                ><Icon>label</Icon></IconButton>
+              </InputAdornment>
+            }
+            value={taskName}
+            onChange={(e) => setTaskName(e.target.value)}
+            onKeyDown={handleKeyDown}
+            />
+            {
+              todoList.length > 0 &&
+              <div style={{ width: '100%' }}>
+                <Container>
+                  <Box p={1} m={1} display="flex">
+                    <Box flexGrow={1}>{pendingCount > 0 ?  getPendingItemsHint(pendingCount) : ''}</Box>
+                      
+                        <Box>
+                          {
+                            todoList.filter((item) => item.status === 2).length > 0 && (
+                              <Link component="button" color="secondary" onClick={clearCompleted}>Clear completed</Link>
+                            )
+                          } 
+                        </Box>
+                  </Box>
+
+                  <Paper className={classes.listRoot} elevation={1}>
+                    
+                    <List 
+                      onMouseLeave={() => setHoverId(0)}>
+                      {
+                        finalList.map((item, index) => {
+                          const labelId = `label-${item.id}`
+                          return (
+                            <ListItem key={item.id} button 
+                              divider={index !== todoList.length -1}
+                              onMouseEnter={() => setHoverId(item.id)}
+                              
+                              onClick={() => handleToggle(item.id)}>
+                              <ListItemIcon>
+                                <Checkbox
+                                  edge="start"
+                                  checked={item.status === 2}
+                                  tabIndex={-1}
+                                  disableRipple
+                                  inputProps={{ 'aria-labelledby': labelId}}
+                                />
+                              </ListItemIcon>
+                              <ListItemText id={labelId} className={classes.todoListText} primary={
+                                <Typography color={item.status === 2 ? 'textSecondary' : 'textPrimary'} className={item.status === 2 ? classes.completedTask : '' } variant="h5">{item.name}</Typography>
+                              } />
+                              {
+                                hoverId === item.id && (
+                                  <ListItemSecondaryAction>
+                                    <IconButton edge="end" aria-label="comments"
+                                      onClick={() => handleDelete(item.id)}>
+                                      <Icon>delete</Icon>
+                                    </IconButton>
+                                  </ListItemSecondaryAction>
+                                )
+                              }
                             
-                            onClick={() => handleToggle(item.id)}>
-                            <ListItemIcon>
-                              <Checkbox
-                                edge="start"
-                                checked={item.status === 2}
-                                tabIndex={-1}
-                                disableRipple
-                                inputProps={{ 'aria-labelledby': labelId}}
-                              />
-                            </ListItemIcon>
-                            <ListItemText id={labelId} className={classes.todoListText} primary={
-                              <Typography color={item.status === 2 ? 'textSecondary' : 'textPrimary'} className={item.status === 2 ? classes.completedTask : '' } variant="h5">{item.name}</Typography>
-                            } />
-                            {
-                              hoverId === item.id && (
-                                <ListItemSecondaryAction>
-                                  <IconButton edge="end" aria-label="comments"
-                                    onClick={() => handleDelete(item.id)}>
-                                    <Icon>delete</Icon>
-                                  </IconButton>
-                                </ListItemSecondaryAction>
-                              )
-                            }
-                          
-                          </ListItem>
-                          
-                        );
+                            </ListItem>
+                            
+                          );
+                        })
+                      }
+                    </List>
+                  </Paper>
+                </Container>
+                <div className={classes.filterStatusRoot}>
+                    {
+                      filterStatuses().map(item => {
+                        return (
+                          <Chip 
+                            key={item.status}
+                            className={classes.chip} 
+                            color={filterStatus === item.status ? 'primary' : 'default'} 
+                            label={item.label} 
+                            onClick={() => handleFilterStatusClick(item.status)}/>
+                        )
                       })
                     }
-                  </List>
-                </Paper>
-              </Container>
-              <div className={classes.filterStatusRoot}>
-                  {
-                    filterStatuses().map(item => {
-                      return (
-                        <Chip 
-                          key={item.status}
-                          className={classes.chip} 
-                          color={filterStatus === item.status ? 'primary' : 'default'} 
-                          label={item.label} 
-                          onClick={() => handleFilterStatusClick(item.status)}/>
-                      )
-                    })
-                  }
+                </div>
               </div>
-            </div>
-          }
-      </div>
-    </Container>
+            }
+        </div>
+      </Container>
+    </div>
   )
 }
