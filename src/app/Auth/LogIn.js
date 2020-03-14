@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, Typography, Grid, TextField, Button, Link } from "@material-ui/core";
+import axios from 'axios'
+
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -18,9 +20,16 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function LogIn() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   function handleSubmit(event) {
     event.preventDefault()
+    console.log(email, password);
+    
+    // axios.get()
   }
+
 
   const classes = useStyles();
 
@@ -41,6 +50,8 @@ export default function LogIn() {
                 fullWidth
                 id="email"
                 label="Email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 autoFocus
               /> 
             </Grid>
@@ -54,6 +65,8 @@ export default function LogIn() {
                 id="password"
                 type="password"
                 label="Password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
                 autoFocus
               /> 
             </Grid>

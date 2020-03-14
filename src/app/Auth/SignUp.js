@@ -1,6 +1,8 @@
 import React from 'react'
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles"
 import { Container, Typography, Grid, TextField, Button, Link } from "@material-ui/core";
+import axios from 'axios'
+
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -20,6 +22,8 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp() {
   function handleSubmit(event) {
     event.preventDefault()
+    // call api
+    // axios.get()
   }
   
   const classes = useStyles();
