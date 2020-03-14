@@ -1,5 +1,5 @@
-import React from 'react'
-import { Container, Input, makeStyles, TextField, InputAdornment, Icon } from '@material-ui/core'
+import React, {useState} from 'react'
+import { Container, Input, makeStyles, TextField, InputAdornment, Icon, IconButton, Divider, Grid, Typography, Box, List, ListItem, ListItemIcon, Checkbox, ListItemText, ListItemSecondaryAction } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -9,12 +9,38 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center'
   },
   todoInput: {
-    fontSize: '30px'
+    fontSize: '30px',
+    marginBottom: theme.spacing(4)
+  },
+  todoList: {
+    width: '100%'
+  },
+  todoListText: {
+    fontSize: '22px'
   }
 }))
 
 export default function ToDo() {
+  const todo = {
+    id: 1,
+    task: 'Do This',
+    status: 1
+  }
+  const [todoList, setTodoList] = useState([todo])
+  const [filterStatus, setFilterStatus] = useState(0)
   const classes = useStyles()
+  
+  function handleComplete(id) {
+    const newList = todoList.map((item) => {
+      if (item.id === id) {
+        item.status = 2
+      }
+      return item
+    })
+    setTodoList(newList)
+  }
+  const finalList = filterStatus === 0 ? todoList : todoList.filter((item) => item.status === filterStatus)
+
   return (
     <Container maxWidth='sm' >
       <div className={classes.paper}>
@@ -25,11 +51,44 @@ export default function ToDo() {
           placeholder="What is your task?"
           endAdornment={
             <InputAdornment position="end">
-              <Icon>star</Icon>
+              <IconButton fontSize="large"><Icon>label</Icon></IconButton>
             </InputAdornment>
           }
           />
-
+          <div style={{ width: '100%' }}>
+            <Box p={1} m={1} display="flex">
+              <Box flexGrow={1}>3 items left</Box>
+              <Box >Clear completed</Box>
+            </Box>
+          </div>
+          <List className={classes.todoList}>
+            {
+              finalList.map(item => {
+                const labelId = `label-${item.id}`
+                return (
+                  <ListItem key={item.id} role={undefined} dense button onClick={() => handleComplete(item.id)}>
+                    <ListItemIcon>
+                      <Checkbox
+                        edge="start"
+                        checked={item.status === 2}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{ 'aria-labelledby': labelId}}
+                      />
+                    </ListItemIcon>
+                    <ListItemText id={labelId} className={classes.todoListText} primary={
+                      <Typography variant="h5">{item.task}</Typography>
+                    } />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" aria-label="comments">
+                        <Icon>delete</Icon>
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                );
+              })
+            }
+          </List>
       </div>
     </Container>
   )
