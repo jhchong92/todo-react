@@ -23,9 +23,10 @@ const useStyles = makeStyles(theme => ({
 export default function ToDo() {
   const todo = {
     id: 1,
-    task: 'Do This',
+    name: 'Do This',
     status: 1
   }
+  const [taskName, setTaskName] = useState('')
   const [todoList, setTodoList] = useState([todo])
   const [filterStatus, setFilterStatus] = useState(0)
   const classes = useStyles()
@@ -39,6 +40,27 @@ export default function ToDo() {
     })
     setTodoList(newList)
   }
+
+  function handleKeyDown(event) {
+    if (event.which === 13) { // enter pressed
+      console.log('enter pressed')
+      // add a todo
+      if (taskName && taskName !== '') {
+        const timestamp = (new Date()).getTime();
+        setTodoList([
+          ...todoList,
+          {
+            id: timestamp,
+            name: taskName,
+            status: 1
+          }
+        ])
+      }
+    }else if (event.which === 27) { // escape pressed
+
+    }
+  }
+  
   const finalList = filterStatus === 0 ? todoList : todoList.filter((item) => item.status === filterStatus)
 
   return (
@@ -54,6 +76,9 @@ export default function ToDo() {
               <IconButton fontSize="large"><Icon>label</Icon></IconButton>
             </InputAdornment>
           }
+          value={taskName}
+          onChange={(e) => setTaskName(e.target.value)}
+          onKeyDown={handleKeyDown}
           />
           <div style={{ width: '100%' }}>
             <Box p={1} m={1} display="flex">
@@ -77,7 +102,7 @@ export default function ToDo() {
                       />
                     </ListItemIcon>
                     <ListItemText id={labelId} className={classes.todoListText} primary={
-                      <Typography variant="h5">{item.task}</Typography>
+                      <Typography variant="h5">{item.name}</Typography>
                     } />
                     <ListItemSecondaryAction>
                       <IconButton edge="end" aria-label="comments">
