@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, Typography, Grid, TextField, Button, Link } from "@material-ui/core";
 import axios from 'axios'
+import { Auth } from 'aws-amplify';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -25,9 +26,26 @@ export default function LogIn() {
 
   function handleSubmit(event) {
     event.preventDefault()
-    console.log(email, password);
+    Auth.signIn(email, password)
+    .then((user) => {
+      console.log('sign in')
+      console.log(user)
+    })
+    .catch((error) => {
+      console.log('error')
+      console.log(error)
+    })
     
-    // axios.get()
+    // axios.get('https://todo-react.auth.ap-southeast-1.amazoncognito.com/login', {
+    //   params: {
+    //     response_type: 'code',
+    //     client_id: '5f4ucadabnvtvvkn72arpooi7a',
+    //     redirect_uri: 'http://localhost:3001/home'
+    //   }
+    // })
+    // .then((response) => {
+    //   console.log(response)
+    // })
   }
 
 
