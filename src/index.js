@@ -7,6 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import SignUp from './app/Auth/SignUp';
 import LogIn from './app/Auth/LogIn';
 import Amplify, { Auth } from "aws-amplify";
+import ToDo from './app/ToDo/ToDo';
 
 const routing = (
   <Router>
@@ -14,6 +15,7 @@ const routing = (
       <Route exact path="/" component={App}/>
       <Route path="/register" component={SignUp}/>
       <Route path="/login" component={LogIn}/>
+      <Route path="/todo" component={ToDo}/>
     </div>
   </Router>
 )
