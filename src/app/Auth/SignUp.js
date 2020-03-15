@@ -68,7 +68,7 @@ export default function SignUp() {
                 autoFocus
               /> 
             </Grid> */}
-            <Grid item sm={12}>
+            <Grid item sm={12} xs={12}>
               <TextField
                 autoComplete="email"
                 name="email"
@@ -81,7 +81,7 @@ export default function SignUp() {
                 autoFocus
               /> 
             </Grid>
-            <Grid item sm={12}>
+            <Grid item sm={12} xs={12}>
               <TextField
                 autoComplete="current-password"
                 name="password"

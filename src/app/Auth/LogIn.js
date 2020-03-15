@@ -14,7 +14,8 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center'
   },
   form: {
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
+    width: '100%'
   },
   submit: {
     marginTop: theme.spacing(3),
@@ -62,7 +63,7 @@ export default function LogIn() {
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item sm={12}>
+            <Grid item sm={12} xs={12}>
               <TextField
                 autoComplete="email"
                 name="email"
@@ -76,7 +77,7 @@ export default function LogIn() {
                 autoFocus
               /> 
             </Grid>
-            <Grid item sm={12}>
+            <Grid item sm={12} xs={12}>
               <TextField
                 autoComplete="current-password"
                 name="password"
