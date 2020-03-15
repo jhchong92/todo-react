@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from "@material-ui/core/styles"
+import { Alert } from "@material-ui/lab"
 import { Container, Typography, Grid, TextField, Button, Link } from "@material-ui/core";
 import axios from 'axios'
+import { Auth } from 'aws-amplify';
+import { useHistory } from 'react-router-dom';
+import Session from '../Session/session';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -20,12 +24,28 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function SignUp() {
+  const history = useHistory()
+  const [error, setError] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   function handleSubmit(event) {
     event.preventDefault()
     // call api
-    // axios.get()
+    Auth.signUp(email, password)
+    .then((user) => {
+      Session.storeCognitoUser(user)
+      history.push('/todo')
+    })
+    .catch((error) => {
+      console.log('error')
+      console.log(error)
+      setError(error.message)
+    })
   }
   
+  const isInputValid = () => {
+    return email !== '' && password.length >= 6
+  }
   const classes = useStyles();
   return (
     <Container component="main" maxWidth="xs">
@@ -35,7 +55,7 @@ export default function SignUp() {
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item sm={12}>
+            {/* <Grid item sm={12}>
               <TextField
                 autoComplete="name"
                 name="name"
@@ -46,7 +66,7 @@ export default function SignUp() {
                 label="Name"
                 autoFocus
               /> 
-            </Grid>
+            </Grid> */}
             <Grid item sm={12}>
               <TextField
                 autoComplete="email"
@@ -56,6 +76,7 @@ export default function SignUp() {
                 fullWidth
                 id="email"
                 label="Email"
+                onChange={e => setEmail(e.target.value)}
                 autoFocus
               /> 
             </Grid>
@@ -69,9 +90,15 @@ export default function SignUp() {
                 id="password"
                 type="password"
                 label="Password"
+                onChange={e => setPassword(e.target.value)}
                 autoFocus
               /> 
             </Grid>
+              { error !== '' &&
+                <Grid item sm={12}>
+                  <Alert onClose={() => setError('')} severity="error">{error}</Alert>
+                </Grid>
+              }
           </Grid>
           <Button 
             type="submit"
@@ -79,6 +106,7 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={!isInputValid()}
             >
               Sign Up
           </Button>
