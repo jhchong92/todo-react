@@ -22,6 +22,22 @@ const Session = {
   invalidate: () => {
     localStorage.removeItem('session')
   },
+  isValid: () => {
+    const session = Session.get()
+    if (session) {
+      return !Session.isExpired(session)
+    }
+    return false;
+  },
+  isExpired: (session) => {
+    const date = new Date()
+    console.log('check session expiry', date.getTime(), session)
+    if (session.idTokenExpiry < date.getTime() / 1000 ) {
+      console.log('expired')
+      return true;
+    }
+    return false;
+  }
 }
 
 export default Session

@@ -11,11 +11,17 @@ import ToDo from './app/ToDo/ToDo';
 import Session from './app/Session/session';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={(props) => (
-    Session.get() !== null
-      ? <Component {...props} />
-      : <Redirect to='/login' />
-  )} />
+  <Route {...rest} render={(props) => {
+    const sessionValid = Session.isValid()
+    if (!sessionValid) {
+      Session.invalidate()
+    }
+    return (
+       sessionValid
+        ? <Component {...props} />
+        : <Redirect to='/login' />
+    )
+  }} />
 )
 
 const NonGuestRoute = ({ component: Component, ...rest }) => (

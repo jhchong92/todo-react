@@ -57,11 +57,12 @@ export default function ToDo() {
   const [hoverId, setHoverId] = useState(0)
   const classes = useStyles()
   
+  // console.log('initial', todoList)
   // load once
   useEffect(() => {
     console.log(Session.get())
-    console.log('fetch todos')
     ToDoApi.fetchTodos().then((res) => {
+      console.log('fetch todos', res)
       setTodoList(res)
     })
   }, [])
@@ -94,13 +95,17 @@ export default function ToDo() {
     return ''
   }
   function handleToggle(id) {
-    const newList = todoList.map((item) => {
-      if (item.id === id) {
-        item.task_status = item.task_status === 1 ? 2 : 1
-      }
-      return item
+    console.log('handleToggle', id)
+    const index = todoList.findIndex((item) => item.id === id)
+    console.log('toggledIndex', index)
+
+    const todo = todoList[index]
+    const toggleStatus = todo.task_status === 1 ? 2 : 1
+    ToDoApi.updateTodoStatus(id, toggleStatus)
+    .then((res) => {
+      todoList[index].task_status = toggleStatus
     })
-    setTodoList(newList)
+    // setTodoList(todoList.splice())
   }
 
   function handleKeyDown(event) {
@@ -122,15 +127,14 @@ export default function ToDo() {
     if (taskName === '') {
       return
     }
-    const timestamp = (new Date()).getTime();
-    setTodoList([
-      ...todoList,
-      {
-        id: timestamp,
-        name: taskName,
-        status: 1
-      }
-    ])
+    ToDoApi.submitTodo(taskName).then((data) => {
+      setTodoList([
+        ...todoList,
+        data
+      ])
+      console.log('submit todo', data, todoList)
+    })
+    
     setTaskName('')
   }
 
@@ -139,6 +143,16 @@ export default function ToDo() {
   }
 
   function clearCompleted() {
+    ToDoApi.clearCompleted()
+    .then((clearedItems) => {
+
+      todoList.forEach((item) => {
+        const clearedItem = clearedItems.find((clearedItem) => clearedItem.id === item.id)
+        if (clearedItem) {
+          item.task_status = clearedItem.task_status
+        }
+      })
+    })
     setTodoList(todoList.filter((item) => item.task_status !== 2)) 
   }
 
@@ -148,9 +162,16 @@ export default function ToDo() {
     history.replace('/login')
   }
 
+  function getFinalList() {
+    if (filterStatus === 0) {
+      return todoList.filter((item) => item.task_status !== 3)
+    }
+    return todoList.filter((item) => item.task_status === filterStatus)
+  }
+
   const pendingCount = todoList.filter((item) => item.task_status === 1).length
 
-  const finalList = filterStatus === 0 ? todoList : todoList.filter((item) => item.task_status === filterStatus)
+  const finalList = getFinalList()
 
   return (
     <div > 
@@ -207,7 +228,8 @@ export default function ToDo() {
                             finalList.map((item, index) => {
                               const labelId = `label-${item.id}`
                               return (
-                                <ListItem key={item.id} button 
+                                <ListItem 
+                                  key={item.id} button 
                                   divider={index !== todoList.length -1}
                                   onMouseEnter={() => setHoverId(item.id)}
                                   
