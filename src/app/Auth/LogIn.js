@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Container, Typography, Grid, TextField, Button, Link } from "@material-ui/core";
 import axios from 'axios'
 import { Auth } from 'aws-amplify';
+import Session from '../Session/session';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -21,15 +23,16 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function LogIn() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const history = useHistory()
 
   function handleSubmit(event) {
     event.preventDefault()
     Auth.signIn(email, password)
     .then((user) => {
-      console.log('sign in')
-      console.log(user)
+      Session.storeCognitoUser(user)
+      history.push('/todo')
     })
     .catch((error) => {
       console.log('error')
