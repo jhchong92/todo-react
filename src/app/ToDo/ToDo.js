@@ -119,8 +119,15 @@ export default function ToDo() {
   }
 
   function handleDelete(id) {
-    const list = todoList.filter((item) => item.id !== id)
-    setTodoList(list)
+    ToDoApi.updateTodoStatus(id, 3)
+    .then((data) => {
+      todoList.forEach((item) => {
+        if (item.id === id) {
+          item.task_status = data.task_status
+        }
+      })
+    })
+    // setTodoList(list)
   }
 
   function addTask() {
@@ -230,24 +237,28 @@ export default function ToDo() {
                               return (
                                 <ListItem 
                                   key={item.id} button 
-                                  divider={index !== todoList.length -1}
+                                  divider={index !== finalList.length -1}
                                   onMouseEnter={() => setHoverId(item.id)}
                                   
                                   onClick={() => handleToggle(item.id)}>
-                                  <ListItemIcon>
-                                    <Checkbox
-                                      edge="start"
-                                      checked={item.task_status === 2}
-                                      tabIndex={-1}
-                                      disableRipple
-                                      inputProps={{ 'aria-labelledby': labelId}}
-                                    />
-                                  </ListItemIcon>
+                                    {
+                                      item.task_status !== 3 && (
+                                        <ListItemIcon>
+                                          <Checkbox
+                                            edge="start"
+                                            checked={item.task_status !== 1}
+                                            tabIndex={-1}
+                                            disableRipple
+                                            inputProps={{ 'aria-labelledby': labelId}}
+                                          />
+                                        </ListItemIcon>
+                                      )
+                                    }
                                   <ListItemText id={labelId} className={classes.todoListText} primary={
-                                    <Typography color={item.task_status === 2 ? 'textSecondary' : 'textPrimary'} className={item.task_status === 2 ? classes.completedTask : '' } variant="h5">{item.task_name}</Typography>
+                                    <Typography color={item.task_status !== 1 ? 'textSecondary' : 'textPrimary'} className={item.task_status !== 1 ? classes.completedTask : '' } variant="h5">{item.task_name}</Typography>
                                   } />
                                   {
-                                    hoverId === item.id && (
+                                    hoverId === item.id && item.task_status !== 3 && (
                                       <ListItemSecondaryAction>
                                         <IconButton edge="end" aria-label="comments"
                                           onClick={() => handleDelete(item.id)}>
