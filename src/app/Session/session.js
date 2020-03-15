@@ -1,8 +1,9 @@
 function mapSession(user) {
   return {
     username: user.username,
-    idToken: user.signInUserSession.idToken,
-    accessToken: user.signInUserSession.accessToken,
+    idToken: user.signInUserSession.idToken.jwtToken,
+    idTokenExpiry: user.signInUserSession.idToken.payload.exp,
+    accessToken: user.signInUserSession.accessToken.jwtToken,
     refreshToken: user.signInUserSession.refreshToken,
   }
 }
