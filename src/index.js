@@ -35,7 +35,7 @@ const NonGuestRoute = ({ component: Component, ...rest }) => (
 const routing = (
   <Router>
     <div>
-      <Route exact path="/" component={App}/>
+      <Redirect from="/" to="/login"/>
       <NonGuestRoute path="/register" component={SignUp}/>
       <NonGuestRoute path="/login" component={LogIn}/>
       <PrivateRoute path="/todo" component={ToDo}/>
