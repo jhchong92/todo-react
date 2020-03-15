@@ -32,9 +32,10 @@ export default function SignUp() {
     event.preventDefault()
     // call api
     Auth.signUp(email, password)
-    .then((user) => {
-      Session.storeCognitoUser(user)
-      history.push('/todo')
+    .then((res) => {
+      console.log('signup', res)
+      // Session.storeCognitoUser(user)
+      history.push('/login')
     })
     .catch((error) => {
       console.log('error')
