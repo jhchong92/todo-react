@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import './index.css';
 import App from './app/App';
 import * as serviceWorker from './serviceWorker';
@@ -26,20 +26,28 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 
 const NonGuestRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => (
-    Session.get() == null
+    !Session.isValid()
       ? <Component {...props} />
+      : <Redirect to='/todo' />
+  )} />
+)
+
+const CatchAllRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    !Session.isValid()
+      ? <Redirect to='/login' />
       : <Redirect to='/todo' />
   )} />
 )
 
 const routing = (
   <Router>
-    <div>
-      <Redirect from="/" to="/login"/>
+    <Switch>
       <NonGuestRoute path="/register" component={SignUp}/>
       <NonGuestRoute path="/login" component={LogIn}/>
       <PrivateRoute path="/todo" component={ToDo}/>
-    </div>
+      <CatchAllRoute exact path="*"/>
+    </Switch>
   </Router>
 )
 
