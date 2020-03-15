@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import { Container, Input, makeStyles, TextField, InputAdornment, Icon, IconButton, Divider, Grid, Typography, Box, List, ListItem, ListItemIcon, Checkbox, ListItemText, ListItemSecondaryAction, Paper, Chip, Button, Link, AppBar, Toolbar } from '@material-ui/core'
+import Session from '../Session/session'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -47,13 +49,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function ToDo() {
-  const todo = {
-    id: 1,
-    name: 'Do This',
-    status: 1
-  }
+  const history = useHistory()
   const [taskName, setTaskName] = useState('')
-  const [todoList, setTodoList] = useState([todo])
+  const [todoList, setTodoList] = useState([])
   const [filterStatus, setFilterStatus] = useState(0)
   const [hoverId, setHoverId] = useState(0)
   const classes = useStyles()
@@ -131,6 +129,12 @@ export default function ToDo() {
     setTodoList(todoList.filter((item) => item.status !== 2)) 
   }
 
+  function logOut() {
+    // need to logout from amplify as well
+    Session.invalidate()
+    history.replace('/login')
+  }
+
   const pendingCount = todoList.filter((item) => item.status === 1).length
 
   const finalList = filterStatus === 0 ? todoList : todoList.filter((item) => item.status === filterStatus)
@@ -141,7 +145,7 @@ export default function ToDo() {
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" className={classes.appBarTitle}>To Do ReactJS</Typography>
-            <Button color="inherit">Log Out</Button>
+            <Button color="inherit" onClick={logOut}>Log Out</Button>
           </Toolbar>
         </AppBar>
 

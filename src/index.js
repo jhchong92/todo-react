@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import './index.css';
 import App from './app/App';
 import * as serviceWorker from './serviceWorker';
@@ -8,14 +8,31 @@ import SignUp from './app/Auth/SignUp';
 import LogIn from './app/Auth/LogIn';
 import Amplify, { Auth } from "aws-amplify";
 import ToDo from './app/ToDo/ToDo';
+import Session from './app/Session/session';
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    Session.get() !== null
+      ? <Component {...props} />
+      : <Redirect to='/login' />
+  )} />
+)
+
+const NonGuestRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    Session.get() == null
+      ? <Component {...props} />
+      : <Redirect to='/todo' />
+  )} />
+)
 
 const routing = (
   <Router>
     <div>
       <Route exact path="/" component={App}/>
-      <Route path="/register" component={SignUp}/>
-      <Route path="/login" component={LogIn}/>
-      <Route path="/todo" component={ToDo}/>
+      <NonGuestRoute path="/register" component={SignUp}/>
+      <NonGuestRoute path="/login" component={LogIn}/>
+      <PrivateRoute path="/todo" component={ToDo}/>
     </div>
   </Router>
 )
