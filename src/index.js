@@ -54,9 +54,9 @@ const routing = (
 // setup aws amplify
 Amplify.configure({
   Auth: {
-    userPoolId: 'ap-southeast-1_d1Ij3mS1Z',
+    userPoolId: 'ap-southeast-1_9BmUg6y0S',
     region: 'ap-southeast-1',
-    userPoolWebClientId: '4m2kpl00g2bdumrp99t060veir',
+    userPoolWebClientId: '1pi9r6t0nq5fre67jma335pibg',
     authenticationFlowType: 'USER_PASSWORD_AUTH',
     oauth: {
       domain: 'https://todo-react.auth.ap-southeast-1.amazoncognito.com',
