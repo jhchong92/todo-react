@@ -59,7 +59,7 @@ Amplify.configure({
     userPoolWebClientId: 'cv4dldsjdbisi023ih8lqdnr8',
     authenticationFlowType: 'USER_PASSWORD_AUTH',
     oauth: {
-      domain: 'https://todo-react.auth.ap-southeast-1.amazoncognito.com',
+      domain: 'https://jh-todo-dev.auth.ap-southeast-1.amazoncognito.com',
       scope: ['email', 'openid'],
       redirectSignIn: 'http://localhost:3001/home',
       redirectSignOut: 'http://localhost:3000/',
