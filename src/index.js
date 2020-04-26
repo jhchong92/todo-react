@@ -56,7 +56,7 @@ Amplify.configure({
   Auth: {
     userPoolId: 'ap-southeast-1_d1Ij3mS1Z',
     region: 'ap-southeast-1',
-    userPoolWebClientId: '4m2kpl00g2bdumrp99t060veir',
+    userPoolWebClientId: 'cv4dldsjdbisi023ih8lqdnr8',
     authenticationFlowType: 'USER_PASSWORD_AUTH',
     oauth: {
       domain: 'https://todo-react.auth.ap-southeast-1.amazoncognito.com',
